@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Datatables Angular Directives</title>  
+
+  <!-- These 3 files are the dependencies. jQuery, Angular and the datatables library file. -->
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+	<script type="text/javascript" src="//cdn.datatables.net/1.9.4/js/jquery.dataTables.min.js"></script>
+	<!-- End -->
+
+	<!-- This is the directive file -->
+	<script type="text/javascript" src="angular.datatables.js"></script>
+	<!-- End -->
+
+	<!-- These files are strictly for styling. Ignore these they are not important -->
+  <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/plug-ins/505bef35b56/integration/bootstrap/3/dataTables.bootstrap.css">
+  <script type="text/javascript" src="//cdn.datatables.net/plug-ins/505bef35b56/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+  <!-- End -->
+
+	<!-- This the Angular controller -->	  
+	<script type="text/javascript">
+
+		// You need to enable the datatablesDirectives 
+		var app = angular.module('Application', ['datatablesDirectives']);
+
+		app.controller('UsersController', function($scope, $window, $location) {
+			
+			$scope.dtOptions = {
+				sAjaxSource: 'data.json',
+				sAjaxDataProp: 'result',
+				bProcessing: false,
+				fnRowCallback: function(row, data, index, fullindex) {
+					if (data.id === 1) {
+						angular.element(row).addClass('blue');
+					}
+				}
+			}
+
+			$scope.idCB = function(data) {
+				if (data.id > 3) {
+					return '<span class="label label-info">'+data.id+'</span>'
+				} 
+				return '<span class="label label-important">'+data.id+'</span>'
+			}
+
+			$scope.aboutCB = function(data) {
+				return data.about.text.substring(0, 50) + '...';
+			}
+		})
+	</script>
+</head>
+
+<body ng-app="Application" ng-controller="UsersController">
+
+	<div class="container">
+
+		<dir class="row">
+			<table datatable dtOptions="dtOptions" class="table">
+				<thead>
+					<tr>
+						<th data-mdata="idCB()" data-sclass="text-center">ID</th>
+						<th data-mdata="name">Name</th>
+						<th data-mdata="aboutCB()">About me</th>
+						<th data-mdata="phone">Phone</th>
+						<th data-mdata="email">Email</th>
+						<th data-mdata="age">Age</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</dir>
+
+	</div>
+	
+</body>
+</html>
+
+
+
+
